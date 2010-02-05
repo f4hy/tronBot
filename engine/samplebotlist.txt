@@ -1,0 +1,10 @@
+# ID, Name, Command
+1,northbot,cd ../python; python northbot.py
+2,python,cd ../python; python randbot.py
+3,wallbot,cd ../python; python wallbot.py
+4,freebot,cd ../python; python freebot.py
+5,ruby,cd ../ruby; ruby MyTronBot.rb
+6,perl,cd ../perl; perl MyTronBot.pl
+7,cpp,cd ../cpp; ./MyTronBot
+8,java,cd ../java; java MyTronBot
+9,cs,cd ../cs; mono MyTronBot.exe

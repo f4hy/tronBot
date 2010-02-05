@@ -1,6 +1,7 @@
 # ID, Name, Command
 1,MyBot,cd ../; python MyTronBot.py
-2,random,cd ../; python randbot.py
-3,wallbot,cd ../; python wallbot.py
-4,freebot,cd ../; python freebot.py
+2,v1,cd ../; python version1.py
+3,random,cd ../; python randbot.py
+4,wallbot,cd ../; python wallbot.py
+5,freebot,cd ../; python freebot.py
 

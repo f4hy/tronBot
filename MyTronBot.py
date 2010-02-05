@@ -28,8 +28,8 @@ def which_move(board):
     
     if DEBUG:
         log = open('log.txt','a')
-        log.write("turn :" + repr(turn) + "\n")
-        log.write("my tail :" + repr(mytail) + "\n")
+        # log.write("turn :" + repr(turn) + "\n")
+        # log.write("my tail :" + repr(mytail) + "\n")
         
     mytail.append(board.me())
     
@@ -39,13 +39,15 @@ def which_move(board):
         
         for move in board.moves():
             if board.rel(move) not in board.adjacent(board.them()):
-                safe.append(move)
+                if any(map(board.passable,board.adjacent(board.rel(move)))):
+                    safe.append(move)
 
-        # if DEBUG:
-        #     log.write("me" + repr(board.me()) + "\n")
-        #     log.write("them" + repr(board.them()) + "\n")
-        #     log.write("moves"+ repr(board.moves()) + "\n")
-        #     log.write("safemoves"+ repr(safe) + "\n")
+
+        if DEBUG:
+            log.write("me" + repr(board.me()) + "\n")
+            log.write("them" + repr(board.them()) + "\n")
+            log.write("moves"+ repr(board.moves()) + "\n")
+            log.write("safemoves"+ repr(safe) + "\n")
         return safe
 
     def isWall(x):

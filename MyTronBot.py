@@ -33,13 +33,9 @@ def which_move(board):
         
     mytail.append(board.me())
     
-    def safemoves():                    # Return moves they wont move to
-        
+    def safemoves():
+        """ Some moves risk draw by coliding with enemy, we try to avoid that"""
         safe = []
-        
-        # danger = board.adjacent(board.them())
-
-
         
         for move in board.moves():
             if board.rel(move) not in board.adjacent(board.them()):
@@ -50,27 +46,24 @@ def which_move(board):
         #     log.write("them" + repr(board.them()) + "\n")
         #     log.write("moves"+ repr(board.moves()) + "\n")
         #     log.write("safemoves"+ repr(safe) + "\n")
-
-        
         return safe
 
     def isWall(x):
+        """ My tail is not a wall, when looking for a wall, ignore my tail"""
         if x in mytail:
             return False
         return not board.passable(x)
 
-
-    if Found is False:
+    if Found is False:                  # Have we found a wall?
         adj = board.adjacent(board.me())
         if True in map(isWall,adj):
-            
             if DEBUG:
                 log.write("FOUND WALL \n")
-                log.write(repr(adj) + "\n")
-                log.write(repr(map(isWall,adj)) + "\n")
+                # log.write(repr(adj) + "\n")
+                # log.write(repr(map(isWall,adj)) + "\n")
             Found = True
 
-    if not board.moves():
+    if not board.moves():               # no legal moves, just fail now
         # if DEBUG:
         #      log.write("no moves")
         if DEBUG:
@@ -97,15 +90,15 @@ def which_move(board):
     #     log.write("safe moves:\n")
     #     log.write(repr(safemoves()) + "\n")
 
-
-
+    # if we have save moves only search them, otherwise search all moves
     if sm:
         trymoves = sm
     else:
         trymoves = board.moves()
 
     distances = {}
-    
+
+    # compute distances to a wall in all directions
     for direction in trymoves:
         tile = board.rel(direction)
         distances[direction] = 0
@@ -121,6 +114,7 @@ def which_move(board):
 
     bestmove = trymoves[0]
 
+    # Move to where we have the most space
     for move in trymoves:
         if Found:
             if distances[move] > distances[bestmove]:
@@ -134,14 +128,9 @@ def which_move(board):
     return bestmove
 
     # if all fails random
-    #return tron.SOUTH
     return random.choice(trymoves)
 
-
-# you do not need to modify this part
-
-
         
-
+# Just always laeve this part
 for board in tron.Board.generate():
     tron.move(which_move(board))

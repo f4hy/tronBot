@@ -7,7 +7,7 @@ import tron
 import random
 
 Found = False
-DEBUG = True
+DEBUG = False
 
 turn = 0
 

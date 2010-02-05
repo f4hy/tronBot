@@ -118,6 +118,9 @@ def which_move(board):
 
     # Move to where we have the most space
     for move in trymoves:
+        # if distances[move] == distances[bestmove]:
+        #      bestmove = random.choice([bestmove,move])
+        #      continue
         if Found:
             if distances[move] > distances[bestmove]:
                 bestmove = move

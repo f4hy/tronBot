@@ -339,7 +339,16 @@ class Board(object):
         tempcount += self.floodfill((y,x-1),index)
 
         return tempcount
-            
+
+    def nopath(self):
+        for spot in self.adjacent(self.them()):
+#            print >>sys.stderr, "path"
+            y,x = spot
+            if self.spaceindex[y][x] != 0:
+#                print >>sys.stderr, "path"
+                return False
+#        print >>sys.stderr, "nopath"
+        return True
               
     # def indexclusters(self):
     #     """Counts the clusters"""

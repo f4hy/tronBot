@@ -13,7 +13,7 @@ import sys, os
 def invalid_input(message):
     """You do not need to call this function directly."""
 
-    print >>sys.stderr, "Invalid input: %s" % message
+    #print >>sys.stderr, "Invalid input: %s" % message
     sys.exit(1)
 
 def readline(buf):
@@ -58,6 +58,8 @@ class Board(object):
         self.width = width
         self._me = None
         self._them = None
+        self.spaceindex = []
+        self.ammount = {}
 
     @staticmethod
     def read(buf):
@@ -211,6 +213,8 @@ class Board(object):
 
         return [self.rel(dir, origin) for dir in DIRECTIONS]
 
+
+
     def moves(self):
         """Calculate which moves are safe to make this turn.
 
@@ -229,6 +233,148 @@ class Board(object):
             # it seems we have already lost
             return [NORTH]
         return passable
+
+
+    def quadrent(self,point):
+        """
+        |1|2|
+        |3|4|
+        """
+        left = point[1] < self.width/2
+        top = point[0] < self.height/2
+        if left and top:
+            return 1
+        if not left and top:
+            return 2
+        if left and not top:
+            return 3
+        else:
+            return 4
+
+    def avoidends(self):
+        #print >>sys.stderr, "safestmoves?"
+        self.createindex()
+       
+        #print >>sys.stderr, self.ammount
+
+        #print >>sys.stderr, max(self.ammount.values())
+
+        safestsize= max(self.ammount.values())
+
+        safest = []
+
+        for move in self.moves():
+            #print >>sys.stderr, self.rel(move)
+            y,x = self.rel(move)
+            if self.ammount[self.spaceindex[y][x]] == safestsize:
+                safest.append(move)
+#            else:
+                #print >>sys.stderr, "removed %d %d" % (y,x)
+
+        #print >>sys.stderr, safest
+        return safest
+        
+    def safemoves(self,moves):
+        """ Some moves risk draw by coliding with enemy, we try to avoid that"""
+        safe = []
+       
+        for move in moves:
+            if self.rel(move) not in self.adjacent(self.them()):
+                safe.append(move)
+
+            
+        
+        #print >>sys.stderr, safe
+        return safe
+
+    def printboard(self):
+#        self.createindex()
+        # for row in self.board:
+        #       #print >>sys.stderr, row
+        for row in self.spaceindex:
+             #print >>sys.stderr, ""            
+             for item in row:
+                print >>sys.stderr, item,
+                ##print >>sys.stderr, self.ammount[item],
+
+    def createindex(self):
+
+        sys.setrecursionlimit(3000)
+
+        self.spaceindex = [ [0 for j in range(self.width)] for i in range(self.height)]
+        index = 1
+        self.ammount[0] = 0
+
+        for spot in self.adjacent(self.me()):
+            self.ammount[index] = self.floodfill(spot,index)
+            index += 1
+
+        # #print >>sys.stderr, sys.getrecursionlimit()
+        #print >>sys.stderr, self.ammount
+            
+    
+    def floodfill(self,point,index):
+
+        tempcount = 0
+        y,x = point
+        if self[point] != FLOOR:
+            # #print >>sys.stderr, "notfloor %d %d" % point
+            # #print >>sys.stderr, self[point]
+            return 0
+        if self[point] != FLOOR or self.spaceindex[y][x] != 0:
+            # #print >>sys.stderr, "already colored %d %d" % point
+            # #print >>sys.stderr, self[point]
+            return 0
+        
+        self.spaceindex[y][x] = index
+        tempcount = 1
+        # #print >>sys.stderr, self.spaceindex
+        # #print >>sys.stderr, "index  %d" % self.spaceindex[y][x]
+        # #print >>sys.stderr, self.spaceindex[y][x]
+
+        
+        tempcount += self.floodfill((y+1,x),index)
+        tempcount += self.floodfill((y,x+1),index)
+        tempcount += self.floodfill((y-1,x),index)
+        tempcount += self.floodfill((y,x-1),index)
+
+        return tempcount
+            
+              
+    # def indexclusters(self):
+    #     """Counts the clusters"""
+        
+    #     numberofclusters = 0
+
+    #     N = self.hieght
+    #     M = self.width
+        
+    #     counted=[ [[0 for j in range(M)] for i in range(N)]
+        
+    #     def countme(i,j):
+    #         counted[i][j] = 1
+    #         size = 1
+    #         if matrix[(i+1)%N][j] == typetocount and counted[(i+1)%N][j] == 0:
+    #             size += countme((i+1)%N,j)
+    #         if matrix[i][(j+1)%M] == typetocount and counted[i][(j+1)%M] == 0:
+    #             size += countme(i,(j+1)%M)
+    #         if matrix[(i-1)%N][j] == typetocount and counted[(i-1)%N][j] == 0:
+    #             size += countme((i-1)%N,j)            
+    #         if matrix[i][(j-1)%M] == typetocount and counted[i][(j-1)%M] == 0:
+    #             size += countme(i,(j-1)%M)
+
+    #         return size
+
+    #     clustersizes = []
+    #     for i in range(N):
+    #         for j in range(M):
+    #             if counted[i][j] == 0 and matrix[i][j] == typetocount:
+    #                 numberofclusters += 1
+    #                 clustersizes.append(countme(i,j))
+    
+               
+    #     return (numberofclusters,clustersizes)
+
 
 NORTH = 1
 EAST  = 2

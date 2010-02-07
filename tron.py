@@ -13,7 +13,7 @@ import sys, os
 def invalid_input(message):
     """You do not need to call this function directly."""
 
-    #print >>sys.stderr, "Invalid input: %s" % message
+    print >>sys.stderr, "Invalid input: %s" % message
     sys.exit(1)
 
 def readline(buf):

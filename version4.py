@@ -110,15 +110,10 @@ def which_move(board):
     # if we have save moves only search them, otherwise search all moves
     if sm:
         trymoves = sm
-    elif goodmoves:
+    if goodmoves:
         trymoves = goodmoves
     else:
         trymoves = allmoves
-
-    if board.nopath():
-        bestmove = spacesave(board,trymoves)
-        if bestmove:
-            return bestmove
 
     closetocenter = abs(board.me()[0] - board.height/2) + abs(board.me()[1] - board.width/2) < 4
     if closetocenter and not hasAttacked:
@@ -246,30 +241,6 @@ def minmaxdistance(board,trymoves):
     return bestmove
     
         
-def spacesave(board,trymoves):
-
-    decision = None
-    # ORDER = list(tron.DIRECTIONS)
-    
-    for dir in trymoves:
-
-
-        # where we will end up if we move this way
-        dest = board.rel(dir)
-
-        # destination is passable?
-        if not board.passable(dest):
-            continue
-
-        # positions adjacent to the destination
-        adj = board.adjacent(dest)
-
-        # if any wall adjacent to the destination
-        if any(board[pos] == tron.WALL for pos in adj):
-            decision = dir
-            break
-
-    return decision
 
         
 # Just always laeve this part

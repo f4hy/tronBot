@@ -1,11 +1,7 @@
 [
-Board(10,10),
-Board(6,6,start="random"),
 BoardFile('../maps/toronto.txt'),
-BoardFile('../maps/map2'),
-BoardFile('../maps/map3'),
-BoardFile('../maps/map4'),
-BoardFile('../maps/map5'),
-BoardFile('../maps/map6'),
-BoardFile('../maps/map7'),
+BoardFile('../maps/quadrant.txt'),
+BoardFile('../maps/trix.txt'),
+BoardFile('../maps/empty-room.txt'),
+BoardFile('../maps/u.txt'),
 ]

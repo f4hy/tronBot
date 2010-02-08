@@ -19,6 +19,8 @@ turn = 0
 
 mytail = []
 
+u1 = ['###############', '#             #', '#           2 #', '#             #', '#   ###########', '#   #          ', '#   #          ', '#   #          ', '#   #          ', '#   #          ', '#   ###########', '#             #', '#           1 #', '#             #', '###############']
+u2 = ['###############', '#             #', '#           1 #', '#             #', '#   ###########', '#   #          ', '#   #          ', '#   #          ', '#   #          ', '#   #          ', '#   ###########', '#             #', '#           2 #', '#             #', '###############']
 
 if DEBUG:
     log = open('log.txt','w')
@@ -66,6 +68,12 @@ def which_move(board):
     mytail.append(board.me())
 
     # sys.stderr.write('turn' + turn + '\n')
+
+    if board.board == u1:
+        return tron.NORTH
+
+    if board.board == u2:
+        return tron.SOUTH
 
 
     def isWall(x):

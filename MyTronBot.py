@@ -14,6 +14,8 @@ Found = False
 Attack = False
 hasAttacked = False
 DEBUG = False
+onuboard1 = False
+onuboard2 = False
 
 turn = 0
 
@@ -42,7 +44,9 @@ def which_move(board):
     global Attack
     global mystartquad
     global theirstartquad
-
+    global onuboard1, onuboard2
+    global hasAttacked
+    
     if DEBUG:
         log = open('log.txt','a')
 #        log.write("board :" + repr(board.board) + "\n")
@@ -52,6 +56,13 @@ def which_move(board):
     if turn == 0:
         mystartquad = board.quadrent(board.me())
         theirstartquad = board.quadrent(board.them())
+        if board.board == u1:
+            onuboard1 = True
+            return tron.NORTH
+
+        if board.board == u2:
+            onuboard2 = True
+            return tron.SOUTH
         if DEBUG:
             log.write("I start in q:" + repr(board.quadrent(board.me())) + "\n")
             log.write("They start in q:" + repr(board.quadrent(board.them())) + "\n")
@@ -62,18 +73,14 @@ def which_move(board):
 
     turn += 1
 
-    
+    # board.p("Should be false till attacked")
+    # board.p(hasAttacked)
     
         
     mytail.append(board.me())
 
     # sys.stderr.write('turn' + turn + '\n')
-
-    if board.board == u1:
-        return tron.NORTH
-
-    if board.board == u2:
-        return tron.SOUTH
+    # board.p(board.me())
 
 
     def isWall(x):
@@ -128,6 +135,19 @@ def which_move(board):
         if bestmove:
             return bestmove
 
+                
+    if not hasAttacked and onuboard1 and board.me()[0] < 7 :
+        # board.p(hasAttacked)
+        beginuattack(board)
+        # board.p("uboard1\n")
+
+            
+    if not hasAttacked and onuboard2 and board.me()[0] > 7 :
+        # board.p(hasAttacked)
+        beginuattack(board)
+        # board.p("uboard2\n")
+
+
     closetocenter = abs(board.me()[0] - board.height/2) + abs(board.me()[1] - board.width/2) < 4
     if closetocenter and not hasAttacked:
         if DEBUG:
@@ -166,6 +186,19 @@ def endattack():
     global endwith
     attackvect = None
     endwith == None
+
+def beginuattack(board):
+    global attackvect
+    global endwith
+    global hasAttacked
+    hasAttacked = True
+
+    attackvect = tron.WEST
+    if onuboard1:
+        endwith = tron.SOUTH
+    if onuboard2:
+        endwith = tron.NORTH
+    
 
 def beginattack(board):
     """

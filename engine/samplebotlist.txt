@@ -6,5 +6,5 @@
 5,freebot,cd ../; python freebot.py
 6,v2,cd ../; python version2.py
 7,v3,cd ../; python version3.py
-7,v4,cd ../; python version4.py
-8,chase,cd ../; java -jar ./example_bots/WallHugger.jar
+8,v4,cd ../; python version4.py
+9,v4.5,cd ../; python version4.5.py
